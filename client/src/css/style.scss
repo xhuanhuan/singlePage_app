@@ -1,0 +1,89 @@
+.container{
+  width:100%;
+  display:flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding:2em;
+}
+.block{
+  width:60%;
+  margin:10px;
+  border-radius: 5px;
+  word-wrap: break-word;
+  background-color: rgb(245,215,215);
+}
+.content_block{
+  padding:1em;
+}
+.Interaction{
+  display:flex;
+  justify-content: space-between;
+  // border-top: 1px solid rgb(180,190,207);
+  padding:0.5em 1em;
+  color:rgb(180,190,207);
+}
+.login-form{
+  width:50%;
+  padding:2em;
+  background-color: rgb(253,230,198);
+  border-radius: 5px;
+}
+
+.header{
+  @extend.container;
+}
+.app-name{
+  font-size: 2.5em;
+
+}
+nav{
+  padding:0.5em 0.5em;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color:rgb(180,190,207);
+  color:rgb(234,166,94);
+}
+.bar{
+  display:block;
+}
+#menu_btn{
+  background-color:rgb(130,170,180);
+  color:rgb(240,196,0);
+  font-size: 1.5em;
+}
+a{
+    color:rgb(140,130,207);
+}
+.menu{
+  position: relative;
+  left:0;
+  top:0;
+  ul{
+    font-size: 1em;
+    visibility:hidden;
+    text-align: center;
+    width:100%;
+    padding: 0;
+    list-style: none;
+    background-color:rgb(253,234,186);
+    position: absolute;
+    right:0;
+    top:100%;
+  }
+}
+.user_warn,.passWord_warn{
+  color:rgb(200,100,80);
+}
+.logout{
+  background-color: rgb(200,100,80);
+}
+.success_note{
+  color: rgb(76,150,160);
+  margin-left: 1em;
+}
+.title_block{
+  font-size: 1.2em;
+  color: rgb(130,170,180);
+}
