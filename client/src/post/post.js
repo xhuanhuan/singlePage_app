@@ -1,5 +1,19 @@
 import AJAX from '../ajax/AJAX.js';
 function post(){
+  if(localStorage.sign_in==="true"){
+    document.getElementById('menu_ul').innerHTML=`
+    <li class="menu_li"><a href="/">首页</a></li>
+    <li class="menu_li"><a id="logout" href="#/logout">登出</a></li>
+    <li class="menu_li"><a href="#/post">发布</a></li>
+    <li class="menu_li"><a href="#/personal">我的</a></li>`
+
+  }else{
+    document.getElementById('menu_ul').innerHTML=`
+    <li class="menu_li"><a href="/">首页</a></li>
+    <li class="menu_li"><a href="#/register">注册</a></li>
+    <li class="menu_li"><a href="#/login">登录</a></li>`
+  }
+  
   var container=document.getElementsByClassName('container')[0];
   if(localStorage.sign_in==="false"){
       container.innerHTML=`<span class="logout">您还未登录，正在跳转登录页面</span>`;
@@ -37,7 +51,6 @@ function post(){
         'token':localStorage.token,
         'title':title,
         'info':content,
-        'like':0
       };
       var ajax=new AJAX({
         method:"POST",

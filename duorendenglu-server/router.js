@@ -149,7 +149,7 @@ function post(req,res){
           username:result.iss,
           title:post.title,
           content: post.info,
-          like:post.like,
+          like:[],
           time: moment().format()
         });
         myinfo.save(function(err,data){
@@ -170,7 +170,78 @@ function post(req,res){
     }
   })
 }
+function like(req,res){
+  var post='';
+  req.on('data', function (chunk) {
+    post += chunk;
+  });
+  req.on('end', function () {
+    post = JSON.parse(post);
+    info.findOne({_id:post._id},function(err,doc){
+      if(err){
+        console.log(err);
+      }else{
+        var index=doc.like.indexOf(post.username);
+        res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+        if(index===-1){
+          doc.like.push(post.username);
+          doc.save();
+          res.write('like');
+        }else{
+            doc.like.splice(index,1);
+            doc.save();
+            res.write("not-like");
+        }
+       res.end();
+      }
+    });
+  });
+}
 
+function personal(req,res){
+  var post='';
+  req.on('data', function (chunk) {
+    post += chunk;
+  });
+  req.on('end', function () {
+    console.log(post);
+    post=JSON.parse(post)
+    info.find({username:post.username},function(err,doc){
+      if(err){
+        console.log(err);
+      }else{
+        console.log(doc);
+        res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+        doc.forEach(function(item){
+          item.time = moment(item.time).format("MMM Do");
+        });
+        res.write(JSON.stringify(doc));
+        res.end();
+      }
+    });
+  });
+}
+function comments(req,res){
+  var post='';
+  req.on('data', function (chunk) {
+    post += chunk;
+  });
+  req.on('end', function () {
+    post=JSON.parse(post)
+    info.findOne({_id:post._id},function(err,doc){
+      if(err){
+        console.log(err);
+      }else{
+        console.log(doc.comments);
+        res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+        doc.comments.push(post.comment);  
+        doc.save();
+        res.write('succeed');
+        res.end();
+      }
+    });
+  });
+}
 module.exports = function(req,res){
   var pathname = url.parse(req.url).pathname;
   console.log(pathname);
@@ -180,6 +251,9 @@ module.exports = function(req,res){
     case '/logout':logout(req,res);break;
     case '/':homepage(req,res);break;
     case '/post':post(req,res);break;
+    case '/like':like(req,res);break;
+    case '/comments':comments(req,res);break;
+    case '/personal':personal(req,res);break;
     default: moren();break;
   }
 }
