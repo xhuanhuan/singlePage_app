@@ -15,4 +15,5 @@ route.route('/register', register);
 route.route('/logout', logout);
 route.route('/post', post);
 route.route('/personal', personal);
+route.route('/upload', function(){console.log('img');});
 export default route;

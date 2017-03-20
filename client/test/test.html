@@ -3,53 +3,64 @@
 <head>
 <script src="jquery-1.12.3.min.js"></script>
 <style>
-.upload-container {
-    background-image: url(sunset.jpg);
-    background-repeat: no-repeat;
-    width: 180px;
-    height: 200px;
-    padding-bottom: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    .fileupload {
-        opacity: 0;
-        filter: alpha(opacity=0);
-        width: 200px;
-        height: 200px;
-    }
+img {
+  width:100px;
+  height:100px;
 }
 </style>
 </head>
 <body>
-<div class="upload-container">
-    <input type="file" name="fileToUpload" id="fileToUpload" class="fileupload" />
-</div>
+<input type="file" name="fileToUpload" multiple="multiple" id="fileToUpload" />
+<div id="progress"></div>
+<div id="output"></div>
 <script>
-$('.fileupload').change(function(event) {
-    /* Act on the event */
-    if ($('.fileupload').val().length) {
-        var fileName = $('.fileupload').val();
-        var extension = fileName.substring(fileName.lastIndexOf('.'), fileName.length).toLowerCase();
-        if (extension == ".jpg" || extension == ".png") {
-                var data = new FormData();
-                data.append('upload', $('#fileToUpload')[0].files[0]);
-                $.ajax({
-                    url: 'apply/upload',
-                    type: 'POST',
-                    data: data,
-                    cache: false,
-                    contentType: false, //不可缺参数
-                    processData: false, //不可缺参数
-                    success: function(data) {
-                        console.log(data);
-                    },
-                    error: function() {
-                        console.log('error');
-                    }
-                });
-        }
+  var i;
+  var html='';
+  var output=document.getElementById("output");
+  var progress=document.getElementById("progress");
+
+  var target=document.getElementById('fileToUpload');
+    target.addEventListener('change',function(e){
+    var files=e.target.files;
+    i=0;
+    len=files.length;
+    while(i<len){
+      get(i,files);
+      i++;
     }
-});
+
+  });
+
+function get(i,files){
+  var type="default";
+  var reader=new FileReader();
+  if(/image/.test(files[i].type)){
+    reader.readAsDataURL(files[i]);
+    type="image";
+  }else{
+    reader.readAsText(files[i]);
+    type="text";
+  }
+  reader.onerror=function(){
+    output.innerHTML="err:"+reader.error.code;
+  }
+  reader.onprogress=function(ev){
+    if(ev.lengthComputable){
+      output.innerHTML=ev.loaded+"/"+ev.total;
+    }
+  }
+  reader.onload=function(){
+    switch(type){
+      case 'image':console.log(reader.result)
+      html=html+'<img src=\"'+reader.result+'\">';
+      break;
+      case 'text':
+      html=html+reader.result;
+      break;
+    }
+    output.innerHTML=html;
+  }
+}
 </script>
 </body>
 </html>

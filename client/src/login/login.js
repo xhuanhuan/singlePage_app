@@ -1,4 +1,5 @@
 import AJAX from '../ajax/AJAX.js';
+import ajax_url from '../config.js';
 
 function login(){
   var container=document.getElementsByClassName('container')[0];
@@ -36,7 +37,7 @@ function login(){
       };
       var ajax=new AJAX({
         method:"POST",
-        url:"http://localhost:8082/login",
+        url:ajax_url+"/login",
         callback:function(res){
           var response=JSON.parse(res);
           if(response.right==="no username"){//用户不存在

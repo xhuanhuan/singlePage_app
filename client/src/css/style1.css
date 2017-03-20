@@ -1,0 +1,24 @@
+@media screen and (max-width: 500px){
+  .login-form{
+    width:90%;
+  }
+  .block{
+    width:90%;
+  }
+  .time{
+    margin-right:0;
+  }
+  .myfig_container{
+  	width:100px;
+  	height:100px;
+  }
+  .block1{
+    height:100px;
+  }
+.box{
+  width:100%;
+}
+p{
+	font-size: 1em;
+}
+}

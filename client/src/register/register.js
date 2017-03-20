@@ -1,4 +1,6 @@
 import AJAX from '../ajax/AJAX.js';
+import ajax_url from '../config.js';
+;
 function register(){
   var container=document.getElementsByClassName('container')[0];
   container.innerHTML=`<div class="login-form"><form role="form">
@@ -43,7 +45,7 @@ function register(){
       };
       var ajax=new AJAX({
         method:"POST",
-        url:"http://localhost:8082/register",
+        url:ajax_url+"/register",
         callback:function(res){
           var response=JSON.parse(res);
           if(response.right==="no"){//用户名已存在
