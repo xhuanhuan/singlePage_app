@@ -5,10 +5,39 @@ var mongoose = require('mongoose');
 var sha1 = require('sha1');
 var jwt = require('./models/jwt_auth');
 var moment = require('moment');
+var uuid = require('node-uuid');
+var fs = require("fs") ;
+var http=require('http');
+var fs=require('fs');
+var path=require('path');
+var errjpg=require('./errjpg');
+
+//添加MIME类型
+var MIME_TYPE = {
+    "css": "text/css",
+    "gif": "image/gif",
+    "html": "text/html",
+    "ico": "image/x-icon",
+    "jpeg": "image/jpeg",
+    "jpg": "image/jpeg",
+    "js": "text/javascript",
+    "json": "application/json",
+    "pdf": "application/pdf",
+    "png": "image/png",
+    "svg": "image/svg+xml",
+    "swf": "application/x-shockwave-flash",
+    "tiff": "image/tiff",
+    "txt": "text/plain",
+    "wav": "audio/x-wav",
+    "wma": "audio/x-ms-wma",
+    "wmv": "video/x-ms-wmv",
+    "xml": "text/xml"
+};
+
 moment.locale('zh-cn');
 mongoose.Promise = global.Promise;
-//mongoose.connect('mongodb://xiaobo:xiaoboma@ds163699.mlab.com:63699/dazhequan');
- mongoose.connect('mongodb://localhost:27017/user')
+mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
+ // mongoose.connect('mongodb://localhost:27017/user')
 function register(req,res){
   var post='';
   req.on('data', function (chunk) {
@@ -39,7 +68,6 @@ function register(req,res){
               console.log(err);
             }else {
               console.log('ok');
-              // console.log(data);
               res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
               var info = {
                 right:'yes',
@@ -61,14 +89,11 @@ function login(req,res){
   });
   req.on('end', function () {
     post = JSON.parse(post);
-    console.log(post);
-    // console.log(user.find({'username':post.username}));
     user.findOne({'username':post.username},function(err,doc){
       if(err) {
         console.log(err);
         return false;
       }else{
-        console.log(doc);
         if(doc === null){
           res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
           var info = {
@@ -117,7 +142,7 @@ function homepage(req,res){
   req.on('end', function () {
     res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
     var news = '';
-    info.find({}).sort({_id:-1}).limit(10).exec(function(err,doc){
+    info.find({}).sort({_id:-1}).exec(function(err,doc){
       if(err){
         console.log(err);
       }else{
@@ -133,8 +158,6 @@ function homepage(req,res){
 
 };
 
-function moren(){};
-
 function post(req,res){
   var post='';
   req.on('data', function (chunk) {
@@ -145,6 +168,7 @@ function post(req,res){
     if(post.token){
       var result = jwt.decode(post.token);
       if(result!='error'){
+
         var myinfo = new info({
           username:result.iss,
           title:post.title,
@@ -152,23 +176,53 @@ function post(req,res){
           like:[],
           time: moment().format()
         });
-        myinfo.save(function(err,data){
-                if(err){
-                  console.log(err);
-                }else {
-                  console.log('ok');
-                }
-              })
+        if(post.fig_info.length===0){
+          myinfo.save(function(err,data){
+                  if(err){
+                    console.log(err);
+                  }else {
+                    console.log('ok');
+                  }
+                });
+                res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+                res.write('yes.no fig');
+                res.end();
+        }else{
+                 var promises=post.fig_info.map(function(item){
+                  return new Promise(function(resolve,reject){
+                    item=item.split(',')[1];
+                    var name=uuid.v1()+'.jpg';
+                    fs.writeFile(`./upload/${name}`,new Buffer(item,'base64'),function(err){
+                      if(err){
+                        reject(err);
+                      }else{
+                      resolve(name);
+                      }
+                    });
+                  });
+                });
+                Promise.all(promises).then(function(posts){
+                  myinfo.figs=posts;
+                  myinfo.save(function(err,data){
+                          if(err){
+                            console.log(err);
+                          }else {
+                            console.log('ok');
+                          }
+                        })
+                  res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+                  res.write('yes,get fig');
+                  res.end();
+               }).catch(function(err){console.log(err)})
+              }
+
+      }else {
         res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
-        res.write('yes');
+        res.write('no');
         res.end();
       }
-    }else {
-      res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
-      res.write('no');
-      res.end();
-    }
-  })
+   }
+ });
 }
 function like(req,res){
   var post='';
@@ -204,13 +258,11 @@ function personal(req,res){
     post += chunk;
   });
   req.on('end', function () {
-    console.log(post);
     post=JSON.parse(post)
     info.find({username:post.username},function(err,doc){
       if(err){
         console.log(err);
       }else{
-        console.log(doc);
         res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
         doc.forEach(function(item){
           item.time = moment(item.time).format("MMM Do");
@@ -218,7 +270,7 @@ function personal(req,res){
         res.write(JSON.stringify(doc));
         res.end();
       }
-    });
+    }).sort({_id:-1});
   });
 }
 function comments(req,res){
@@ -232,9 +284,8 @@ function comments(req,res){
       if(err){
         console.log(err);
       }else{
-        console.log(doc.comments);
         res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
-        doc.comments.push(post.comment);  
+        doc.comments.push(post.comment);
         doc.save();
         res.write('succeed');
         res.end();
@@ -242,9 +293,36 @@ function comments(req,res){
     });
   });
 }
+
+function serverStatic(req,res){
+  console.log('serverStatic');
+  var filePath="./";
+  if(/^\/upload/.test(req.url)){
+      filePath = "./" + url.parse(req.url).pathname;
+  }
+  fs.exists(filePath,function(err){
+      if(!err){
+        res.writeHead(200,{'content-type':contentType});
+        res.end(errjpg);
+      //   console.log('no such file')
+      }else{
+          var ext = path.extname(filePath);
+          ext = ext?ext.slice(1) : 'unknown';
+          var contentType = MIME_TYPE[ext] || "text/plain";
+          fs.readFile(filePath,function(err,data){
+              if(err){
+                  res.end("<h1>500</h1>服务器内部错误！");
+              }else{
+                  res.writeHead(200,{'content-type':contentType});
+                  console.log(contentType);
+                  res.end(data);
+              }
+          });//fs.readfile
+      }
+  })//path.exists
+}
 module.exports = function(req,res){
   var pathname = url.parse(req.url).pathname;
-  console.log(pathname);
   switch(pathname){
     case '/register':register(req,res);break;
     case '/login':login(req,res);break;
@@ -254,6 +332,6 @@ module.exports = function(req,res){
     case '/like':like(req,res);break;
     case '/comments':comments(req,res);break;
     case '/personal':personal(req,res);break;
-    default: moren();break;
+    default: serverStatic(req,res);break;
   }
 }
