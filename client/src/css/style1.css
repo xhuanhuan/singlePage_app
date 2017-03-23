@@ -1,4 +1,4 @@
-@media screen and (max-width: 500px){
+@media screen and (max-width: 900px){
   .login-form{
     width:90%;
   }
@@ -8,13 +8,13 @@
   .time{
     margin-right:0;
   }
-  .myfig_container{
+  /*.myfig_container{
   	width:100px;
   	height:100px;
-  }
-  .block1{
+  }*/
+  /*.block1{
     height:100px;
-  }
+  }*/
 .box{
   width:100%;
 }

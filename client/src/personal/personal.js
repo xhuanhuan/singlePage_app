@@ -17,21 +17,24 @@ function comments(obj){
 }
 function figs(arr){
   var str='';
-  if(arr.length===1||arr.length===2){
-    str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
-  }else{
-    arr.forEach(function(item,index){
-      if(index<4){
-            str+=`<img class="myfig_one" src="${ajax_url}/upload/${item}">`
-      }
-    });
+  // if(arr.length===1||arr.length===2){
+  //   str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
+  // }else{
+  //   arr.forEach(function(item,index){
+  //     if(index<4){
+  //           str+=`<img class="myfig_one" src="${ajax_url}/upload/${item}">`
+  //     }
+  //   });
+  // }
+  if(arr.length>0){
+  str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
   }
   return str;
 }
 function box(obj){
    var  box=document.createElement('div');
    box.setAttribute('class','box');
-   box.innerHTML=`<span class="time">${obj.time.slice(0,-1)}</span>
+   box.innerHTML=`<div class="time">${obj.time.slice(0,-1)}</div>
    <div class="myfig_container">${figs(obj.figs)}</div>`;
    var block=document.createElement('div');
    block.setAttribute('class','block1');
@@ -84,122 +87,10 @@ function personal(){
         callback:function(res){
           var response=JSON.parse(res);
           response.forEach(item=>box(item));
-
-                //
-                // var container=document.getElementsByClassName('container')[0];
-                // var timer;
-                //
-                // function like(id){
-                //     var data1={
-                //       '_id':id,
-                //       'username':localStorage.username
-                //     };
-                //     var aj=new AJAX({
-                //     method:"POST",
-                //     url:"http://localhost:8082/like",
-                //     callback:function(res){console.log(res);},
-                //     data:data1
-                //   });
-                //   aj.send();
-                // }
-                //
-                // var old={};
-                // container.onclick=function(e){
-                //   //like
-                //   if(e.target.className === 'glyphicon glyphicon-thumbs-up like'&& e.target.dataset.index){
-                //     if(localStorage.username===""){
-                //       document.getElementsByClassName('container')[0].innerHTML=`<div>您还没有登录,即将跳转到登录页面</div>`;
-                //       setTimeout(function(){location.hash="/login"},2000);
-                //     }else{
-                //     //产生old,改变颜色和数字
-                //     old[e.target.dataset.index]=!old[e.target.dataset.index];
-                //     e.target.style.color=(e.target.style.color==="red")?"gray":"red";
-                //     e.target.innerHTML=e.target.style.color==="red"?parseInt(e.target.innerHTML)+1:parseInt(e.target.innerHTML)-1;
-                //     //定时发送ajax请求
-                //     clearTimeout(timer);
-                //     timer=setTimeout((function(e){
-                //     return function(){
-                //       for(var key in old){
-                //         if(old[key]){
-                //           like(key);
-                //         }
-                //       }
-                //       old={};
-                //     };
-                //     })(e),2000);
-                //    }
-                //   }
-                //
-                //   //comment
-                //   if(e.target.className==="glyphicon glyphicon-comment"&&e.target.dataset.index){
-                //     if(localStorage.username===""){
-                //       document.getElementsByClassName('container')[0].innerHTML=`<div>您还没有登录,即将跳转到登录页面</div>`;
-                //       setTimeout(function(){location.hash="/login"},2000);
-                //     }else{
-                //       var index=e.target.dataset.index;
-                //       var target=document.querySelectorAll('.comment_block[data-index="'+index+'"]')[0];
-                //       target.style.display=(target.style.display==="flex")?"none":"flex";
-                //     }
-                //   }
-                //   if(e.target.className==="btn btn-warning comment_btn"&&e.target.dataset.index){
-                //     var index=e.target.dataset.index;
-                //     var target=document.querySelectorAll('.comment_input[data-index="'+index+'"]')[0];
-                //     var value=target.value;
-                //     var placeholder=target.placeholder;
-                //     var comment=placeholder.indexOf('回复')===-1?value:placeholder+value ;
-                //     if(comment===""){
-                //       var warn=document.querySelectorAll('.comment_warn[data-index="'+index+'"]')[0];
-                //       warn.innerHTML="*评论不能为空";
-                //       setTimeout(function(){warn.innerHTML="";},1000);
-                //     }else{
-                //       var _comment;
-                //       if(comment.indexOf('回复')===-1){
-                //         _comment='<span><span class="person">'+localStorage.username+'</span>:'+comment+'</span>';
-                //         comment=localStorage.username+':'+comment;
-                //       }else{
-                //         var t=comment.split(':');
-                //         var c=t.shift().split('回复')[1];
-                //         _comment='<span><span class="person">'+localStorage.username+'</span>回复<span class="person">'+c+'</span>:'+t.join(':')+'</span>';
-                //       }
-                //       var pb=document.createElement('div');
-                //       pb.setAttribute('class','comment_one');
-                //       pb.innerHTML=_comment;
-                //       var comment_block=document.querySelectorAll('.comment_block[data-index="'+index+'"]')[0];
-                //       comment_block.appendChild(pb);
-                //       target.value='';
-                //       target.placeholder='评论';
-                //       var dt={
-                //         '_id':e.target.dataset.index,
-                //         'comment':comment
-                //       };
-                //       var ajax=new AJAX({
-                //         method:"POST",
-                //         url:"http://localhost:8082/comments",
-                //         callback:function(res){},
-                //         data:dt
-                //       });
-                //       ajax.send();
-                //     }
-                //   }
-                //
-                //   //answer
-                //   if(e.target.className==="comment_one"&&e.target.dataset.index){
-                //     var index=e.target.dataset.index;
-                //     var asw_target=e.target.innerHTML.split(':')[0];
-                //     if(asw_target.indexOf('回复')!==-1){console.log(asw_target)
-                //       asw_target=asw_target.split('<span><span class="person">')[1].split('</span>')[0];
-                //     }else{
-                //       asw_target=asw_target.split('<span><span class="person">')[1].split('</span>')[0];
-                //     }
-                //     if(localStorage.username!==asw_target){
-                //       var str=localStorage.username+'回复'+asw_target+':';
-                //       var target=document.querySelectorAll('.comment_input[data-index="'+index+'"]')[0];
-                //       target.placeholder=str;
-                //       target.focus();
-                //     }
-                //   }
-                //
-                // }
+          var box_class=[].slice.call(document.getElementsByClassName('box'));
+          box_class.forEach(function(item){item.style.height=item.clientWidth*0.3+'px';});
+          var myfig_container=[].slice.call(document.getElementsByClassName('myfig_container'));
+          myfig_container.forEach(function(item){if(item.innerHTML===''){item.style.width=0;}});
 
         },
         data:data
