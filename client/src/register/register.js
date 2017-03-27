@@ -8,7 +8,7 @@ function register(){
 
   <div class="form-group"><label>密码</label><input type="password" class="form-control" id="passWord" placeholder="请输入密码"></div>
   <div class="form-group"><label>密码</label><input type="password" class="form-control" id="passWord1" placeholder="请再次输入密码">  <span class="passWord_warn"></span></div>
-  <div class="form-group"><button id="register_btn" type="submit" class="btn btn-primary">注册</button></div>
+  <div class="form-group"><button id="register_btn" type="submit" class="btn btn-primary">注册</button><span id="success_note"></span></div>
   </form></div>`;
 
   var register_btn=document.getElementById('register_btn');
@@ -39,6 +39,7 @@ function register(){
       setTimeout(function(){document.getElementsByClassName('passWord_warn')[0].innerHTML='';},1000);
 
     }else{//输入没问题，向服务器发送 用户名、密码
+      document.getElementById('success_note').innerHTML=`<p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>注册中...</p>`;
       var data={
         'username':userName,
         'password':passWord
@@ -52,6 +53,7 @@ function register(){
             document.getElementsByClassName('user_warn')[0].innerHTML='*用户名已存在';
             setTimeout(function(){document.getElementsByClassName('user_warn')[0].innerHTML='';},1000);
           }else{//用户存在，设置登录状态、路由回主页
+            document.getElementById('success_note').innerHTML='注册成功！'
             localStorage.token=response.token;
             localStorage.sign_in=true;
             localStorage.username=userName;

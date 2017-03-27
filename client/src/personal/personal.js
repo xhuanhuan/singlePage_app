@@ -74,17 +74,22 @@ function personal(){
   }
 
   var container=document.getElementsByClassName('container')[0];
-  container.innerHTML="";
+  container.innerHTML='';
   if(localStorage.sign_in==="false"){
       container.innerHTML=`<span class="logout">您还未登录，正在跳转登录页面</span>`;
       setTimeout(function(){location.hash="/login";},2000);
   }else{
-    container.innerHTML=`<div style="width:100%"><img style="width:100%" src='/img/head.jpg'></div>`;
+    container.innerHTML=`<div style="width:100%">
+    <img style="width:100%" src='https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3288731583,2957029988&fm=23&gp=0.jpg'>
+    </div>
+    <p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>loading...</p>`;
     var data={'username':localStorage.username};
     var ajax=new AJAX({
         method:"POST",
         url:ajax_url+"/personal",
         callback:function(res){
+          var loading=document.getElementById('loading');
+          document.getElementsByClassName('container')[0].removeChild(loading);
           var response=JSON.parse(res);
           response.forEach(item=>box(item));
           var box_class=[].slice.call(document.getElementsByClassName('box'));

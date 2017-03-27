@@ -49,7 +49,6 @@ function post(){
     }else {
             window.event.returnValue = false;  //IE中阻止函数器默认动作的方式
     }
-
     var title=document.getElementById('title').value;
     var content=document.getElementById('content').value;
 
@@ -66,6 +65,7 @@ function post(){
     //   setTimeout(function(){document.getElementsByClassName('success_note')[0].innerHTML=""},1000);
     // }
     if(title!==""&&content!==""){
+      document.getElementsByClassName('success_note')[0].innerHTML=`<p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>loading...</p>`;
       var data={
         'token':localStorage.token,
         'title':title,

@@ -88,11 +88,13 @@ function homePage(){
   }
 
 //主页内容
-  document.getElementsByClassName('container')[0].innerHTML="";
+  document.getElementsByClassName('container')[0].innerHTML=`<p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>loading...</p>`;
   var ajax=new AJAX({
     method:"GET",
     url:ajax_url+"/",
     callback:function(res){
+      var loading=document.getElementById('loading');
+      document.getElementsByClassName('container')[0].removeChild(loading);
       var response=JSON.parse(res);
       response.forEach(item=>block(item));
       var figc1=document.getElementsByClassName('fig_container1');
