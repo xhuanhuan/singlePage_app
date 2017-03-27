@@ -7,6 +7,7 @@
   }
   Router.prototype.refresh = function(){
     this.currentUrl = location.hash.slice(1) || '/';
+    console.log(this.currentUrl)
     console.log(location.hash)
     this.routes[this.currentUrl]();
   }
