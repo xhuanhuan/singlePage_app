@@ -75,14 +75,14 @@ function homePage(){
   //menu
   if(localStorage.sign_in==="true"){
     document.getElementById('menu_ul').innerHTML=`
-    <li class="menu_li"><a href="/">首页</a></li>
+    <li class="menu_li"><a href="#">首页</a></li>
     <li class="menu_li"><a id="logout" href="#/logout">登出</a></li>
     <li class="menu_li"><a href="#/post">发布</a></li>
     <li class="menu_li"><a href="#/personal">我的</a></li>`
 
   }else{
     document.getElementById('menu_ul').innerHTML=`
-    <li class="menu_li"><a href="/">首页</a></li>
+    <li class="menu_li"><a href="#">首页</a></li>
     <li class="menu_li"><a href="#/register">注册</a></li>
     <li class="menu_li"><a href="#/login">登录</a></li>`
   }
