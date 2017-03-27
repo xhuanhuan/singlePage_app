@@ -9,7 +9,7 @@ import personal from '../personal/personal.js';
 var route=new Router();
 route.init();
 
-route.route('/', homePage);
+route.route('#/', homePage);
 route.route('/login', login);
 route.route('/register', register);
 route.route('/logout', logout);
