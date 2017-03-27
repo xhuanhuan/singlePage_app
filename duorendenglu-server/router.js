@@ -327,7 +327,7 @@ module.exports = function(req,res){
     case '/register':register(req,res);break;
     case '/login':login(req,res);break;
     case '/logout':logout(req,res);break;
-    case '#/':homepage(req,res);break;
+    case '/':homepage(req,res);break;
     case '/post':post(req,res);break;
     case '/like':like(req,res);break;
     case '/comments':comments(req,res);break;
