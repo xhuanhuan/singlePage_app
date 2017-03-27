@@ -50,7 +50,7 @@ function login(){
             localStorage.username=userName;
             localStorage.token=response.token;
             localStorage.sign_in=true;
-            location.hash="#";
+            location.hash="#/";
          }
         },
         data:data
