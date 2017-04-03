@@ -239,7 +239,7 @@ a{
 #icon_loading{
 	font-size: 1em;
 	color: blue;
-	animation: loading 2s linear 0  infinite;
+	animation: loading 2s linear 0s  infinite;
 	// -webkit-animation: loading 2s linear 0 infinite;
 }
 @keyframes loading {
