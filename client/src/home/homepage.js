@@ -93,8 +93,8 @@ function homePage(){
     method:"GET",
     url:ajax_url+"/",
     callback:function(res){
-      var loading=document.getElementById('loading');
-      document.getElementsByClassName('container')[0].removeChild(loading);
+      // var loading=document.getElementById('loading');
+      // document.getElementsByClassName('container')[0].removeChild(loading);
       var response=JSON.parse(res);
       response.forEach(item=>block(item));
       var figc1=document.getElementsByClassName('fig_container1');
