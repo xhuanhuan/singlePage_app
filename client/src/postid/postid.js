@@ -68,45 +68,28 @@ function block(obj){
     </div>`;
     document.getElementsByClassName('container')[0].appendChild(block);
   }
-
-function homePage(){
-  //user_head
+function postid(id){
   document.getElementById('use_name').innerHTML=localStorage.username||'';
-  //menu
-  if(localStorage.sign_in==="true"){
-    document.getElementById('menu_ul').innerHTML=`
-    <li class="menu_li"><a href="#">首页</a></li>
-    <li class="menu_li"><a id="logout" href="#/logout">登出</a></li>
-    <li class="menu_li"><a href="#/post">发布</a></li>
-    <li class="menu_li"><a href="#/personal">我的</a></li>`
-
-  }else{
-    document.getElementById('menu_ul').innerHTML=`
-    <li class="menu_li"><a href="#">首页</a></li>
-    <li class="menu_li"><a href="#/register">注册</a></li>
-    <li class="menu_li"><a href="#/login">登录</a></li>`
-  }
-
-//主页内容
+  var data={
+    id:id
+  };
   document.getElementsByClassName('container')[0].innerHTML=`<p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>loading...</p>`;
   var ajax=new AJAX({
-    method:"GET",
-    url:ajax_url+"/",
+    method:"POST",
+    url:ajax_url+"/postId",
     callback:function(res){
       var loading=document.getElementById('loading');
       document.getElementsByClassName('container')[0].removeChild(loading);
       var response=JSON.parse(res);
-      response.forEach(item=>block(item));
-      var figc1=document.getElementsByClassName('fig_container1');
-      figc1=[].slice.call(figc1);
-      figc1.forEach(function(item){
-        if(item.innerHTML!==''){
-          item.style.height=item.clientWidth/3+'px';
-        }
-      });
+      block(response);
+      var figc1=document.getElementsByClassName('fig_container1')[0];
+      if(figc1){
+        figc1.style.height=figc1.clientWidth/3+'px';
+      }
     },
-    data:'#'
+    data:data
   });
   ajax.send();//发送ajax请求
+
 }
-export default homePage;
+export default postid;

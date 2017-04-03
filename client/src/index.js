@@ -83,7 +83,9 @@ document.body.onclick=function(e){
     }else{
       var index=e.target.dataset.index;
       var target=document.querySelectorAll('.comment_block[data-index="'+index+'"]')[0];
-      target.style.display=(target.style.display==="flex")?"none":"flex";
+      if(target){
+          target.style.display=(target.style.display==="flex")?"none":"flex";
+      }
     }
   }
   if(e.target.className==="btn btn-warning comment_btn"&&e.target.dataset.index){

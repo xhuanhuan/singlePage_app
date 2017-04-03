@@ -2,6 +2,7 @@ import AJAX from '../ajax/AJAX.js';
 import ajax_url from '../config.js';
 
 function post(){
+    document.getElementById('use_name').innerHTML=localStorage.username||'';
   //menu
   if(localStorage.sign_in==="true"){
     document.getElementById('menu_ul').innerHTML=`

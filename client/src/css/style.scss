@@ -67,10 +67,10 @@
   font-size: 1.6em;
 }
 .content_block{
-  padding:1em;
+  padding-left:0.5em;
 	padding-right: 0;
 	// height:80%;
-	overflow: auto;
+	overflow: hidden;
 }
 .Interaction{
   display:flex;
@@ -239,8 +239,8 @@ a{
 #icon_loading{
 	font-size: 1em;
 	color: blue;
-	animation: loading 2s linear 2s  infinite;
-	-webkit-animation: loading 2s linear 2s infinite;
+	animation: loading 2s linear 0  infinite;
+	// -webkit-animation: loading 2s linear 0 infinite;
 }
 @keyframes loading {
 	0%   {transform:rotate(0deg);}
@@ -249,13 +249,13 @@ a{
 	75%  {transform:rotate(270deg);}
 	100% {transform:rotate(360deg);}
 }
-@-webkit-keyframes loading {
-	0%   {transform:rotate(0deg);}
-	25%  {transform:rotate(90deg);}
-	50%  {transform:rotate(180deg);}
-	75%  {transform:rotate(270deg);}
-	100% {transform:rotate(360deg);}
-}
+// @-webkit-keyframes loading {
+// 	0%   {transform:rotate(0deg);}
+// 	25%  {transform:rotate(90deg);}
+// 	50%  {transform:rotate(180deg);}
+// 	75%  {transform:rotate(270deg);}
+// 	100% {transform:rotate(360deg);}
+// }
 #loading{
 	display:block;
 }

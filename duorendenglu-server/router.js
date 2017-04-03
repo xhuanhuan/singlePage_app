@@ -36,8 +36,8 @@ var MIME_TYPE = {
 
 moment.locale('zh-cn');
 mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
-mongoose.connect('mongodb://localhost:27017/user')
+ mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
+// mongoose.connect('mongodb://localhost:27017/user')
 function register(req,res){
   var post='';
   req.on('data', function (chunk) {
@@ -295,7 +295,6 @@ function comments(req,res){
 }
 
 function serverStatic(req,res){
-  console.log('serverStatic');
   var filePath="./";
   if(/^\/upload/.test(req.url)){
       filePath = "./" + url.parse(req.url).pathname;
@@ -321,8 +320,28 @@ function serverStatic(req,res){
       }
   })//path.exists
 }
+
+function postId(req,res){
+  var post='';
+  req.on('data', function (chunk) {
+    post += chunk;
+  });
+  req.on('end', function () {
+    post=JSON.parse(post);
+    info.findOne({_id:post.id},function(err,doc){
+      if(err){
+        console.log(err);
+      }else{
+        res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+        doc.time = moment(doc.time).format("MMM Do");
+        res.write(JSON.stringify(doc));
+        res.end();
+      }
+    });
+   });
+}
 module.exports = function(req,res){
-  var pathname = url.parse(req.url).pathname;
+  var pathname = url.parse(req.url).pathname;console.log(pathname)
   switch(pathname){
     case '/register':register(req,res);break;
     case '/login':login(req,res);break;
@@ -332,6 +351,7 @@ module.exports = function(req,res){
     case '/like':like(req,res);break;
     case '/comments':comments(req,res);break;
     case '/personal':personal(req,res);break;
+    case '/postId':postId(req,res);break;
     default: serverStatic(req,res);break;
   }
 }

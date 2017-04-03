@@ -17,15 +17,6 @@ function comments(obj){
 }
 function figs(arr){
   var str='';
-  // if(arr.length===1||arr.length===2){
-  //   str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
-  // }else{
-  //   arr.forEach(function(item,index){
-  //     if(index<4){
-  //           str+=`<img class="myfig_one" src="${ajax_url}/upload/${item}">`
-  //     }
-  //   });
-  // }
   if(arr.length>0){
   str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
   }
@@ -38,8 +29,9 @@ function box(obj){
    <div class="myfig_container">${figs(obj.figs)}</div>`;
    var block=document.createElement('div');
    block.setAttribute('class','block1');
+    block.setAttribute('data-index',`${obj._id}`);
    block.innerHTML=`<div class="content_block">
-   <p><span class="title_block">${obj.title} | </span>${obj.content}</p>
+   <p><a href='#/personal/${obj._id}' class="title_block">${obj.title} | </a>${obj.content}</p>
    </div>
    <div class="Interaction">
    <span>${obj.figs.length}张图</span>
@@ -47,18 +39,12 @@ function box(obj){
    <span data-index='${obj._id}' class="glyphicon glyphicon-comment">${obj.comments.length}</span>
    <span data-index='${obj._id}' class="glyphicon glyphicon-thumbs-up like" style="color:${obj.like.indexOf(localStorage.username)===-1?'gray':'red'}">${obj.like.length}</span>
    </span>
-   <div data-index='${obj._id}' class="comment_block">
-   <div class="input">
-   <input data-index='${obj._id}' class="comment_input" placeholder="评论"><button data-index='${obj._id}' class="btn btn-warning comment_btn" >发送</button>
-   </div>
-   <span data-index='${obj._id}' class="comment_warn"></span>
-   ${comments(obj)}
-   </div>
    </div>`;
     box.appendChild(block);
     document.getElementsByClassName('container')[0].appendChild(box);
   }
 function personal(){
+    document.getElementById('use_name').innerHTML=localStorage.username||'';
   if(localStorage.sign_in==="true"){
     document.getElementById('menu_ul').innerHTML=`
     <li class="menu_li"><a href="#">首页</a></li>
@@ -96,7 +82,6 @@ function personal(){
           box_class.forEach(function(item){item.style.height=item.clientWidth*0.3+'px';});
           var myfig_container=[].slice.call(document.getElementsByClassName('myfig_container'));
           myfig_container.forEach(function(item){if(item.innerHTML===''){item.style.width=0;}});
-
         },
         data:data
     });
