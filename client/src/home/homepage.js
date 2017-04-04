@@ -1,7 +1,11 @@
 import AJAX from '../ajax/AJAX.js';
 import ajax_url from '../config.js';
 import refresh from '../components/refresh.js';
+import pullUpLoading from '../components/pullUpLoading.js';
 
+var data={
+  index:1
+};
 function comments(obj){
   var str='';
   obj.comments.forEach(function(item){
@@ -69,7 +73,29 @@ function block(obj){
     </div>`;
     document.getElementsByClassName('container')[0].appendChild(block);
   }
-
+function getInfo(){
+  data.index++;
+  var ajax=new AJAX({
+    method:"POST",
+    url:ajax_url+"/",
+    callback:function(res){
+      if(res!=='all'){
+        var response=JSON.parse(res);
+        response.forEach(item=>block(item));
+        var figc1=document.getElementsByClassName('fig_container1');
+        figc1=[].slice.call(figc1);
+        figc1.forEach(function(item){
+          if(item.innerHTML!==''){
+            item.style.height=item.clientWidth/3+'px';
+          }
+        });
+        pullUpLoading(getInfo);
+      }
+    },
+    data:data
+  });
+  ajax.send();//发送ajax请求
+}
 function homePage(){
   //user_head
   document.getElementById('use_name').innerHTML=localStorage.username||'';
@@ -91,23 +117,27 @@ function homePage(){
 //主页内容
   document.getElementsByClassName('container')[0].innerHTML=`<p id="loading"><span id="icon_loading" class="glyphicon glyphicon-asterisk"></span>loading...</p>`;
   var ajax=new AJAX({
-    method:"GET",
+    method:"POST",
     url:ajax_url+"/",
     callback:function(res){
       var loading=document.getElementById('loading');
       document.getElementsByClassName('container')[0].removeChild(loading);
-      var response=JSON.parse(res);
-      response.forEach(item=>block(item));
-      var figc1=document.getElementsByClassName('fig_container1');
-      figc1=[].slice.call(figc1);
-      figc1.forEach(function(item){
-        if(item.innerHTML!==''){
-          item.style.height=item.clientWidth/3+'px';
-        }
-      });
       refresh();
+      if(JSON.parse(res)){
+        var response=JSON.parse(res);
+        response.forEach(item=>block(item));
+        var figc1=document.getElementsByClassName('fig_container1');
+        figc1=[].slice.call(figc1);
+        figc1.forEach(function(item){
+          if(item.innerHTML!==''){
+            item.style.height=item.clientWidth/3+'px';
+          }
+        });
+        pullUpLoading(getInfo);
+      }
+
     },
-    data:'#'
+    data:data
   });
   ajax.send();//发送ajax请求
 }

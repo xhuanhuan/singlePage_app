@@ -36,8 +36,8 @@ var MIME_TYPE = {
 
 moment.locale('zh-cn');
 mongoose.Promise = global.Promise;
- // mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
- mongoose.connect('mongodb://localhost:27017/user')
+ mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
+ // mongoose.connect('mongodb://localhost:27017/user')
 function register(req,res){
   var post='';
   req.on('data', function (chunk) {
@@ -140,17 +140,22 @@ function homepage(req,res){
     post += chunk;
   });
   req.on('end', function () {
+    post = JSON.parse(post);
     res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
     var news = '';
-    info.find({}).sort({_id:-1}).exec(function(err,doc){
+    info.find({}).sort({_id:-1}).limit(5*post.index).exec(function(err,doc){
       if(err){
         console.log(err);
-      }else{
+      }else if(doc.length>5*(post.index-1)){
+        doc.splice(0,(post.index-1)*5);
         doc.forEach(function(item){
           item.time = moment(item.time).fromNow();
         })
         news = JSON.stringify(doc);
         res.write(news);
+        res.end();
+      }else{
+        res.write('all');
         res.end();
       }
     });

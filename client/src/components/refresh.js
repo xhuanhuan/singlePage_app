@@ -8,11 +8,16 @@ function touch_start(e){
   end=start;
   if(location.hash===''&&document.body.scrollTop===0){
     container.addEventListener('touchmove',touch_move);
+  }else{
+      container.removeEventListener('touchstart',touch_start);
+      container.removeEventListener('touchend',touch_end);
   }
 }
 function touch_move(e){
-  e.preventDefault();
     end=e.touches[0].pageY;
+    if(end-start>0){
+      e.preventDefault();
+    }
     var down=(end-start<50)?end-start:50;
     container.style.marginTop=top+down+'px';
 }
