@@ -36,8 +36,8 @@ var MIME_TYPE = {
 
 moment.locale('zh-cn');
 mongoose.Promise = global.Promise;
- mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
-// mongoose.connect('mongodb://localhost:27017/user')
+ // mongoose.connect('mongodb://chowhound-diary:123456@ds131890.mlab.com:31890/chowhound-diary');
+ mongoose.connect('mongodb://localhost:27017/user')
 function register(req,res){
   var post='';
   req.on('data', function (chunk) {

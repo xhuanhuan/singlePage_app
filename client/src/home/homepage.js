@@ -1,5 +1,6 @@
 import AJAX from '../ajax/AJAX.js';
 import ajax_url from '../config.js';
+import refresh from '../components/refresh.js';
 
 function comments(obj){
   var str='';
@@ -104,6 +105,7 @@ function homePage(){
           item.style.height=item.clientWidth/3+'px';
         }
       });
+      refresh();
     },
     data:'#'
   });
