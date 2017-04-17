@@ -173,7 +173,6 @@ function post(req,res){
     if(post.token){
       var result = jwt.decode(post.token);
       if(result!='error'){
-
         var myinfo = new info({
           username:result.iss,
           title:post.title,
@@ -190,35 +189,20 @@ function post(req,res){
                   }
                 });
                 res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
-                res.write('yes.no fig');
+                res.write('yes,no fig');
                 res.end();
         }else{
-                 var promises=post.fig_info.map(function(item){
-                  return new Promise(function(resolve,reject){
-                    item=item.split(',')[1];
-                    var name=uuid.v1()+'.jpg';
-                    fs.writeFile(`./upload/${name}`,new Buffer(item,'base64'),function(err){
-                      if(err){
-                        reject(err);
-                      }else{
-                      resolve(name);
-                      }
-                    });
-                  });
-                });
-                Promise.all(promises).then(function(posts){
-                  myinfo.figs=posts;
-                  myinfo.save(function(err,data){
-                          if(err){
-                            console.log(err);
-                          }else {
-                            console.log('ok');
-                          }
-                        })
-                  res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
-                  res.write('yes,get fig');
-                  res.end();
-               }).catch(function(err){console.log(err)})
+                myinfo.figs=post.fig_info;
+                myinfo.save(function(err,data){
+                        if(err){
+                          console.log(err);
+                        }else {
+                          console.log('ok');
+                        }
+                      });
+                res.writeHead(200, {'Content-Type': 'text/html',"Access-Control-Allow-Origin":"*"});
+                res.write('yes,get fig');
+                res.end();
               }
 
       }else {

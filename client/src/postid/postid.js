@@ -21,19 +21,19 @@ function figs(arr){
   if(len===0){
     return '';
   }else if(len===1){
-    str=`<div class="fig_container1"><img class="post_fig" src="${ajax_url}/upload/${arr[0]}"></div>`
+    str=`<div class="fig_container1"><img class="post_fig" src="${arr[0]}"></div>`
   }
   else if(len===2){
     str=`<div class="fig_container1">`;
     arr.forEach(function(item){
-      str=str+`<img  class="post_fig" src="${ajax_url}/upload/${item}">`
+      str=str+`<img  class="post_fig" src="${item}">`
     });
     str+=`</div>`;
   }
   else{
     str=`<div class="fig_container1">`;
     arr.forEach(function(item,index){
-      str=str+`<img class="post_fig" src="${ajax_url}/upload/${item}">`
+      str=str+`<img class="post_fig" src="${item}">`
       if((index+1)%3===0){
         str=str+`</div><div class="fig_container1">`
       }

@@ -18,7 +18,7 @@ function comments(obj){
 function figs(arr){
   var str='';
   if(arr.length>0){
-  str=`<img style="height:100%;" class="myfig_one" src="${ajax_url}/upload/${arr[0]}">`
+  str=`<img style="height:100%;" class="myfig_one" src="${arr[0]}">`
   }
   return str;
 }
