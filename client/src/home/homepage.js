@@ -2,10 +2,11 @@ import AJAX from '../ajax/AJAX.js';
 import ajax_url from '../config.js';
 import refresh from '../components/refresh.js';
 import pullUpLoading from '../components/pullUpLoading.js';
-
+import imgLazyLoading from '../components/imglazyloading.js';
 var data={
   index:1
 };
+var imgs=[];
 function comments(obj){
   var str='';
   obj.comments.forEach(function(item){
@@ -26,19 +27,19 @@ function figs(arr){
   if(len===0){
     return '';
   }else if(len===1){
-    str=`<div class="fig_container1"><img class="post_fig" src="${arr[0]}"></div>`
+    str=`<div class="fig_container1"><img class="post_fig" src=""></div>`
   }
   else if(len===2){
     str=`<div class="fig_container1">`;
     arr.forEach(function(item){
-      str=str+`<img  class="post_fig" src="${item}">`
+      str=str+`<img  class="post_fig" src="">`
     });
     str+=`</div>`;
   }
   else{
     str=`<div class="fig_container1">`;
     arr.forEach(function(item,index){
-      str=str+`<img class="post_fig" src="${item}">`
+      str=str+`<img class="post_fig" src="">`
       if((index+1)%3===0){
         str=str+`</div><div class="fig_container1">`
       }
@@ -90,6 +91,12 @@ function getInfo(){
           }
         });
         pullUpLoading(getInfo);
+        response.forEach(function(item){
+          if(item.figs.length>0){
+            imgs=imgs.concat(item.figs);
+          }
+        });
+          imgLazyLoading(imgs);
       }else{
         console.log('all data have been here')
       }
@@ -136,6 +143,13 @@ function homePage(){
           }
         });
         pullUpLoading(getInfo);
+        imgs=[];
+        response.forEach(function(item){
+          if(item.figs.length>0){
+            imgs=imgs.concat(item.figs);
+          }
+        });
+         imgLazyLoading(imgs);
       }else{
         console.log('no data')
       }
