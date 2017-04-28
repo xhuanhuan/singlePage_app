@@ -1,3 +1,4 @@
+import juhua from '../juhua.js';
 var imgnodes=[];
 var visualHeight=getWindowHeight()+100;
 var first=0;
@@ -31,8 +32,12 @@ function scroll(){
   imgnodes=[].slice.call(document.getElementsByTagName('img'));
   imgnodes.forEach(function(img,index){
     var pos=img.getBoundingClientRect();
-    if(pos.top>-50&&pos.bottom<visualHeight&&img.src==="http://localhost:8080/"){
-        img.src=res[index];
+    if(pos.top>-50&&pos.bottom<visualHeight&&img.src===juhua){
+      var image=new Image();
+        image.src=res[index];
+        image.onload = function(){
+          img.src = image.src;
+        };
     }
   });
 }

@@ -1,5 +1,6 @@
 import AJAX from '../ajax/AJAX.js';
 import ajax_url from '../config.js';
+import juhua from '../juhua.js';
 import refresh from '../components/refresh.js';
 import pullUpLoading from '../components/pullUpLoading.js';
 import imgLazyLoading from '../components/imglazyloading.js';
@@ -27,19 +28,19 @@ function figs(arr){
   if(len===0){
     return '';
   }else if(len===1){
-    str=`<div class="fig_container1"><img class="post_fig" src=""></div>`
+    str=`<div class="fig_container1"><img class="post_fig" src="${juhua}"></div>`
   }
   else if(len===2){
     str=`<div class="fig_container1">`;
     arr.forEach(function(item){
-      str=str+`<img  class="post_fig" src="">`
+      str=str+`<img  class="post_fig" src="${juhua}">`
     });
     str+=`</div>`;
   }
   else{
     str=`<div class="fig_container1">`;
     arr.forEach(function(item,index){
-      str=str+`<img class="post_fig" src="">`
+      str=str+`<img class="post_fig" src="${juhua}">`
       if((index+1)%3===0){
         str=str+`</div><div class="fig_container1">`
       }
