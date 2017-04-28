@@ -11,7 +11,7 @@ function imgLazyLoading(response){
 
     if(first===0){
     scroll();
-    window.addEventListener('scroll',throttle(scroll,300));
+    window.addEventListener('scroll',throttle(scroll,200));
     first++;
   }
   }

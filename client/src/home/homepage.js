@@ -107,6 +107,7 @@ function getInfo(){
   ajax.send();//发送ajax请求
 }
 function homePage(){
+  data.index=1;
   //user_head
   document.getElementById('use_name').innerHTML=localStorage.username||'';
   //menu
